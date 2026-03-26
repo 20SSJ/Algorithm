@@ -1,6 +1,5 @@
 import java.io.*;
 import java.util.*;
-import java.util.Map.Entry;
 
 public class Main {
 
@@ -14,17 +13,18 @@ public class Main {
 			HashMap<String, Integer> hm = new HashMap<>();
 			for(int i = 0; i < n; i++) {
 				StringTokenizer st = new StringTokenizer(br.readLine());
-				st.nextToken();
+				String item = st.nextToken();
 				String input = st.nextToken();
-				hm.put(input, hm.getOrDefault(input, 0) + 1);
+				if(!hm.containsKey(input)) hm.put(input, 2);
+				else {
+					int value = hm.get(input) + 1;
+					hm.put(input, value);
+				}
 			}
 			
 			int sum = 1;
 			
-			for(Entry<String, Integer> es : hm.entrySet()) {
-				sum *= es.getValue() + 1;
-			}
-			
+			for(int v : hm.values()) sum *= v;
 			System.out.println(sum - 1);
 		}
 	}
