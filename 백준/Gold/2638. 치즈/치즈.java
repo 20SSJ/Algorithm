@@ -15,8 +15,7 @@ public class Main {
 		public Node(int r, int c) {
 			this.r = r;
 			this.c = c;
-		}
-		
+		}	
 	}
 
 	private static void dfs(int r, int c) {
@@ -32,16 +31,12 @@ public class Main {
 	}
 	
 	private static void bfs(int r, int c) {
-		int start = grid[r][c];
-		boolean v[][] = new boolean[N][M];
 		Queue<Node> q = new ArrayDeque<>();
-		v[r][c] = true;
+		boolean v[][] = new boolean[N][M];
 		
-		for(int i = 0; i < N; i++) {
-			for(int j = 0; j < M; j++) {
-				if(start == grid[i][j]) q.add(new Node(i, j));
-			}
-		}
+		q.add(new Node(r, c));
+		v[r][c] = true;
+		grid[r][c] = -1;
 		
 		while(!q.isEmpty()) {
 			Node cur = q.poll();
@@ -119,7 +114,7 @@ public class Main {
 		
 		int ans = 0;
 		v = new boolean[N][M];
-		dfs(0, 0); // 외부 공기 표시
+		bfs(0, 0); // 외부 공기 표시
 		while(!check()) {
 			bfs(); // 치즈 녹이기
 			ans++;
