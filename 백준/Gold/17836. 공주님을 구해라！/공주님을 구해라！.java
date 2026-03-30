@@ -27,15 +27,15 @@ public class Main {
         while(!q.isEmpty()) {
             Node cur = q.poll();
             
+            if(cur.r == N -1 && cur.c == M - 1) {
+            	return cur.weight;
+            }
+
             for(int d = 0; d < 4; d++) {
                 int nr = cur.r + dr[d];
                 int nc = cur.c + dc[d];
                 int knife = cur.sword;
                 int dist = cur.weight;
-                
-                if(cur.r == N -1 && cur.c == M - 1) {
-                	return dist;
-                }
                 
                 if(isValid(nr, nc) && !v[nr][nc][knife]) {
                     if(knife == 1) {
@@ -78,5 +78,4 @@ public class Main {
         if(time > T || time == -1) System.out.println("Fail");
         else System.out.println(time);
     }
-
 }
