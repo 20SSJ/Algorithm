@@ -27,28 +27,23 @@ public class Main {
 		}
 	}
 	
-	private static void bfs() {
-		Queue<Node> q = new ArrayDeque<>();
-		for(int i = 0; i < N; i++) {
-			for(int j = 0; j < M; j++) {
-				if(sea[i][j] != 0) q.offer(new Node(i, j));
-			}
-		}
-		
+	private static void melt() {
 		int tmp[][] = new int[N][M];
 		
-		while(!q.isEmpty()) {
-			Node cur = q.poll();
-			int cnt = 0;
-			for(int d = 0; d < 4; d++) {
-				int nr = cur.r + dr[d];
-				int nc = cur.c + dc[d];
-				
-				if(isValid(nr, nc)) {
-					if(sea[nr][nc] == 0) cnt++;
+		for(int i = 0; i < N; i++) {
+			for(int j = 0; j < M; j++) {
+				if(sea[i][j] == 0) continue;
+				int cnt = 0;
+				for(int d = 0; d < 4; d++) {
+					int nr = i + dr[d];
+					int nc = j + dc[d];
+					
+					if(isValid(nr, nc)) {
+						if(sea[nr][nc] == 0) cnt++;
+					}
 				}
+				tmp[i][j] = cnt; 
 			}
-			tmp[cur.r][cur.c] = cnt; 
 		}
 		
 		for(int i = 0; i < N; i++) {
@@ -56,17 +51,6 @@ public class Main {
 				sea[i][j] = Math.max(0, sea[i][j] - tmp[i][j]);
 			}
 		}
-	}
-	
-	private static boolean check() {
-		for(int i = 0; i < N; i++) {
-			for(int j = 0; j < M; j++) {
-				if(sea[i][j] != 0) return true;
-			}
-		}
-		
-		System.out.println(0);
-		return false;
 	}
 	
 	private static boolean isValid(int r, int c) {
@@ -88,26 +72,10 @@ public class Main {
 			}
 		}
 		
-		int num = 0;
-		boolean[][] v = new boolean[N][M];
-		for(int i = 0; i < N; i++) {
-			for(int j = 0; j < M; j++) {
-				if(sea[i][j] > 0 && !v[i][j]) {
-					dfs(i, j, v); // 섬 개수 세기
-					num++;
-				}
-			}
-		}
-		if(num > 1) {
-			System.out.println(0);
-			return;
-		}
 		cnt = 0;
-		while(check()) {
-			bfs(); // 얼음 녹이기
-			cnt++;
-			num = 0;
-			v = new boolean[N][M];
+		while(true) {
+			int num = 0;
+			boolean[][] v = new boolean[N][M];
 			for(int i = 0; i < N; i++) {
 				for(int j = 0; j < M; j++) {
 					if(sea[i][j] > 0 && !v[i][j]) {
@@ -118,8 +86,14 @@ public class Main {
 			}
 			if(num > 1) {
 				System.out.println(cnt);
-				return;
+				break;
 			}
+			if(num == 0) {
+				System.out.println(0);
+				break;
+			}
+			melt(); // 얼음 녹이기
+			cnt++;
 		}
 	}
 }
