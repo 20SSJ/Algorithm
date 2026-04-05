@@ -17,10 +17,9 @@ public class Main {
 				cnt++;
 			}
 			
-			for(int d = dir; d < dir + 4; d++) { // 2번
-				int p = d % 4;
-				int nr = r + dr[p];
-				int nc = c + dc[p];
+			for(int d = 0; d < 4; d++) { // 2번
+				int nr = r + dr[d];
+				int nc = c + dc[d];
 				if(isValid(nr, nc) && map[nr][nc] == 0) bflg = false;
 			}
 			
@@ -33,26 +32,17 @@ public class Main {
 					return cnt;
 				}
 			} else { // 3번
-				for(int d = dir - 1; d >= dir - 4; d--) {
-					int p = (d + 4) % 4;
-					int nr = r + dr[p];
-					int nc = c + dc[p];
+				for(int i = 0; i < 4; i++) {
+					dir = (dir + 3) % 4;
+					int nr = r + dr[dir];
+					int nc = c + dc[dir];
 					if(isValid(nr, nc) && map[nr][nc] == 0) {
 						r = nr;
 						c = nc;
-						dir = p;
 						break;
 					}
 				}
 			} 
-		}
-	}
-	
-	private static void print() {
-		for(int i = 0; i < N; i++) {
-			for(int j = 0; j < M; j++) {
-				System.out.print(map[i][j] + " ");
-			}System.out.println();
 		}
 	}
 	
