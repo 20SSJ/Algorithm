@@ -2,53 +2,55 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	static List<Integer>[] tree;
-	static int count, remove;
+    static boolean[] v;
+    static int ans;
+    static ArrayList<Integer> tree[];
 
-	public static void main(String[] args) throws IOException{
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		
-		// 노드의 수
-		int N = Integer.parseInt(br.readLine());
-		
-		tree = new ArrayList[N];
-		for(int i = 0; i < N; i++) {
-			tree[i] = new ArrayList<>();
-		}
-		
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		int start = 0;
-		for(int i = 0; i < N; i++) {
-			// 부모의 번호
-			int value = Integer.parseInt(st.nextToken());
-			
-			if(value != -1) { // 부모가 있다면
-				tree[value].add(i);
-			} else start = i;
-		}
-		
-		remove = Integer.parseInt(br.readLine());
-		
-		if(remove == start) {
-			System.out.println(0);
-			return;
-		}
-		
-		count = 0; // 리프 노드 세기
-		preorder(start); // 전위 순회하면서 리프 노드 탐색
-		System.out.println(count);
-	}
+    public static void leaf(int root){
+        Queue<Integer> q = new ArrayDeque<>();
+        q.offer(root);
 
-	private static void preorder(int start) {
-		int child = 0;
-		
-		for(int nxt: tree[start]) {
-			if(nxt != remove) {
-				child++;
-				preorder(nxt);
-			}
-		}
-		
-		if(child == 0) count++;
-	}
+        while(!q.isEmpty()){
+            int cur = q.poll();
+
+            if(v[cur]) continue;
+            v[cur] = true;
+            boolean bflg = true;
+            for(int i : tree[cur]){
+                if(v[i]) continue;
+                q.offer(i);
+                bflg = false;
+            }
+            if(bflg) ans++;
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        int n = Integer.parseInt(br.readLine());
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int root = 0;
+        tree = new ArrayList[n];
+        for(int i = 0; i < n; i++){
+            tree[i] = new ArrayList<>();
+        }
+        v = new boolean[n + 1];
+        for(int i = 0; i < n; i++){
+            int node = Integer.parseInt(st.nextToken());
+            if(node == -1) root = i;
+            else{
+                tree[node].add(i);
+            }
+        }
+        int del = Integer.parseInt(br.readLine());
+        v[del] = true;
+        if(root == del){
+            System.out.print(0);
+            return;
+        }
+        ans = 0;
+        leaf(root);
+        System.out.print(ans);
+    }
 }
