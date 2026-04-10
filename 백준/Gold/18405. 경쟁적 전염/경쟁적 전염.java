@@ -3,18 +3,18 @@ import java.util.*;
 
 public class Main {
 	static int[][] map;
-	static int N;
+	static int N, S;
 	static int[] dr = {-1, 1, 0, 0};
 	static int[] dc = {0, 0, -1, 1};
-	static PriorityQueue<Node> pq;
 	
 	static class Node implements Comparable<Node>{
-		int r, c, v;
+		int r, c, v, time;
 		
-		public Node(int r, int c, int value) {
+		public Node(int r, int c, int value, int time) {
 			this.r = r;
 			this.c = c;
 			this.v = value;
+			this.time = time;
 		}
 		
 		public int compareTo(Node o) {
@@ -22,41 +22,33 @@ public class Main {
 		}
 	}
 	
-	private static void bfs(int s) {
-		Queue<Node> q = new ArrayDeque<>();
+	private static void bfs(ArrayList<Node> list) {
+		Queue<Node> q = new ArrayDeque<>(list);
 		
-		while(!pq.isEmpty() && s-- > 0) {
-			int size = pq.size();
+		while(!q.isEmpty()) {
+			int size = q.size();
 			while(size-- > 0) {				
-				Node cur = pq.poll();
+				Node cur = q.poll();
 				int curR = cur.r;
 				int curC = cur.c;
-				int value = map[curR][curC];
+				int value = cur.v;
+				int time = cur.time;
+				
+				if(time == S) return;
 				for(int d = 0; d < 4; d++) {
 					int nr = curR + dr[d];
 					int nc = curC + dc[d];
 					if(isValid(nr, nc) && map[nr][nc] == 0) {
 						map[nr][nc] = value;
-						q.offer(new Node (nr, nc, value));
+						q.offer(new Node (nr, nc, value, time + 1));
 					}
 				}
-			}
-			while(!q.isEmpty()) {
-				pq.offer(q.poll());
 			}
 		}
 	}
 	
 	public static boolean isValid(int r, int c) {
 		return r >= 0 && r < N && c >= 0 && c < N;
-	}
-	
-	public static void print() {
-		for(int i = 0; i < N; i++) {
-			for(int j = 0; j < N; j++) {
-				System.out.print(map[i][j] + " ");
-			} System.out.println();
-		}
 	}
 	
 	public static void main(String[] args) throws IOException {
@@ -67,21 +59,24 @@ public class Main {
 		int K = Integer.parseInt(st.nextToken());
 		
 		map = new int[N][N];
-		pq = new PriorityQueue<>();
+		ArrayList<Node> list = new ArrayList<>();
 		
 		for(int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine());
 			for(int j = 0; j < N; j++) {
 				int value = Integer.parseInt(st.nextToken());
 				map[i][j] = value;
-				if(value > 0) pq.offer(new Node(i, j, value));
+				if(value > 0) list.add(new Node(i, j, value, 0));
 			}
 		}
+		
+		Collections.sort(list);
+
 		st = new StringTokenizer(br.readLine());
-		int S = Integer.parseInt(st.nextToken());
+		S = Integer.parseInt(st.nextToken());
 		int X = Integer.parseInt(st.nextToken());
 		int Y = Integer.parseInt(st.nextToken());
-		bfs(S);
+		bfs(list);
 		System.out.println(map[X - 1][Y - 1]);
 	}
 }
