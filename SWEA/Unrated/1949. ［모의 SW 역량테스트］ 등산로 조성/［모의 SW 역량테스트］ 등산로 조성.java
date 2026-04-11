@@ -6,18 +6,6 @@ public class Solution {
 	static int N, K, ans;
 	static boolean v[][];
 	
-	static class Node{
-		int r, c, length, work, curValue;
-		
-		public Node(int r, int c, int length, int work, int curValue) {
-			this.r = r;
-			this.c = c;
-			this.length = length;
-			this.work = work;
-			this.curValue = curValue;
-		}
-	}
-	
 	static int[] dr = {-1, 1, 0, 0};
 	static int[] dc = {0, 0, -1, 1};
 	
@@ -33,8 +21,7 @@ public class Solution {
 					dfs(nr, nc, w, map[nr][nc], length + 1);
 				} else {
 					if(w == 0) {
-						int sub = map[nr][nc] - curV;
-						if(sub < K) {
+						if(map[nr][nc] - K < curV) {
 							dfs(nr, nc, 1, map[r][c] - 1, length + 1);
 						}
 					}
