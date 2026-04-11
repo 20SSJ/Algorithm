@@ -10,35 +10,20 @@ public class Main {
 	static int height, width;
 	static boolean v[][];
 	
-	public static boolean check() {
-		for(int i = 0; i < height; i++) {
-			for(int j = 0; j < width; j++) {
-				if(map[i][j] == 1) return true;
-			}
-		}
-		return false;
-	}
-	
 	public static void del() {
 		Queue<int[]> q = new ArrayDeque<>();
+		List<int[]> ch = new ArrayList<>();
 		for(int i = 0; i < height; i++) {
 			for(int j = 0; j < width; j++) {
-				if(map[i][j] == 1) q.offer(new int[] {i, j});
-			}
-		}
-		
-		List<int[]> ch = new ArrayList<>();
-		
-		while(!q.isEmpty()) {
-			int[] cur = q.poll();
-			int curR = cur[0];
-			int curC = cur[1];
-			for(int d = 0; d < 4; d++) {
-				int nr = curR + dr[d];
-				int nc = curC + dc[d];
-				if(isValid(nr, nc) && map[nr][nc] == -1) {
-					ch.add(new int[] {curR, curC});
-					break;
+				if(map[i][j] == 1) {
+					for(int d = 0; d < 4; d++) {
+						int nr = i + dr[d];
+						int nc = j + dc[d];
+						if(isValid(nr, nc) && map[nr][nc] == -1) {
+							ch.add(new int[] {i, j});
+							break;
+						}
+					}
 				}
 			}
 		}
@@ -85,23 +70,28 @@ public class Main {
 		width = Integer.parseInt(st.nextToken());
 		
 		map = new int[height][width];
+		int total = 0;
 		for(int i = 0; i < height; i++) {
 			st = new StringTokenizer(br.readLine());
 			for(int j = 0; j < width; j++) {
-				map[i][j] = Integer.parseInt(st.nextToken());
+				int value = Integer.parseInt(st.nextToken());
+				map[i][j] = value;
+				if(value == 1) total++;
 			}
 		}
 
 		int time = 0;
 		v = new boolean[height][width];
 		dfs(0, 0);
-		while(check()) {
+		while(total > 0) {
 			cnt = 0;
 			del();
+			total -= cnt;
 			time++;
 			v = new boolean[height][width];
 			dfs(0, 0);
 		}
+		
 		System.out.println(time);
 		System.out.println(cnt);
 	}
