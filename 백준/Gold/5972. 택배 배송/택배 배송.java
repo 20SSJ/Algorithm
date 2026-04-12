@@ -28,6 +28,7 @@ public class Main {
 			Node cur = pq.poll();
 			
 			if(cur.weight > path[cur.nxt]) continue;
+            if(cur.nxt == N) return cur.weight;
 
 			for(Node o : post[cur.nxt]) {
 				int nxtPath = path[cur.nxt] + o.weight;
