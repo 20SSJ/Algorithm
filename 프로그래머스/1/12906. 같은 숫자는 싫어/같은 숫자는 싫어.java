@@ -3,14 +3,15 @@ import java.util.*;
 public class Solution {
     public int[] solution(int []arr) {
         
-        Stack<Integer> st = new Stack<>();
-        st.push(arr[0]);
+        Queue<Integer> q = new ArrayDeque<>();
+        q.offer(arr[0]);
         for(int i = 1; i < arr.length; i++){
-            if(arr[i] != arr[i-1]) st.push(arr[i]);
+            if(arr[i] != arr[i-1]) q.offer(arr[i]);
         }
-        int[] answer = new int[st.size()];
-        for(int i = st.size() - 1; i >= 0; i--){
-            answer[i] = st.pop();
+        int[] answer = new int[q.size()];
+        int i = 0;
+        while(!q.isEmpty()){
+            answer[i++] = q.poll();
         }
         return answer;
     }
