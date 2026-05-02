@@ -1,13 +1,12 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Solution {
 	static int[] dr = {-1, 1, 0, 0};
 	static int[] dc = {0, 0, -1, 1};
+	static char[] tank = {'^', 'v', '<', '>'};
 	static int H, W, d;
 	
 	public static boolean isValid(int r, int c) {
@@ -47,12 +46,9 @@ public class Solution {
 			int N = Integer.parseInt(br.readLine());
 			String cmd = br.readLine();
 			
-			Queue<int[]> q = new ArrayDeque<>();
-			q.offer(new int[] {start[0], start[1]});
+			int curR = start[0];
+			int curC = start[1];
 			for(int i = 0; i < N; i++) {
-				int[] cur = q.poll();
-				int curR = cur[0];
-				int curC = cur[1];
 				char c = cmd.charAt(i);
 				int nr, nc;
 				if(c == 'S') {
@@ -66,46 +62,31 @@ public class Solution {
 						nr += dr[d];
 						nc += dc[d];
 					}
-					q.offer(new int[] {curR, curC});
 					continue;
 				}
-				char tank = ' ';
-				if(c == 'U') {
-					d = 0;
-					tank = '^';
-				}
-				if(c == 'D') {
-					d = 1;
-					tank = 'v';
-				}
-				if(c == 'L') {
-					d = 2;
-					tank = '<';
-				}
-				if(c == 'R') {
-					d = 3;
-					tank = '>';
-				}
+				
+				if(c == 'U') d = 0;
+				else if(c == 'D') d = 1;
+				else if(c == 'L') d = 2;
+				else if(c == 'R') d = 3;
+				
 				nr = curR + dr[d];
 				nc = curC + dc[d];
 				if(isValid(nr, nc) && map[nr][nc] == '.') {
 					map[curR][curC] = '.';
-					q.offer(new int[] {nr, nc});
-					map[nr][nc] = tank;
+					curR = nr;
+					curC = nc;
+					map[nr][nc] = tank[d];
 				}
 				else {
-					q.offer(new int[] {curR, curC});
-					map[curR][curC] = tank;
+					map[curR][curC] = tank[d];
 				}
 			}
 			sb.append("#").append(tc).append(" ");
 			for(int i = 0; i < H; i++) {
-				for(int j = 0; j < W; j++) {
-					sb.append(map[i][j]);
-				}sb.append("\n");
+				sb.append(map[i]).append("\n");
 			}
 		}
 		System.out.println(sb);
 	}
-
 }
