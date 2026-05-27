@@ -15,12 +15,8 @@ public class Main {
        int cnt = 0;
        for(int i = 0; i < N; i++){
            for(int j = i + 1; j < N; j++){
-                if(i == j) continue;
-                int res = 0;
                for(int k = j + 1; k < N; k++){
-                    if(i == k || j == k) continue;
-                    res = arr[i] + arr[j] + arr[k];
-                    if(res == K) cnt++;
+                    if(arr[i] + arr[j] + arr[k] == K) cnt++;
                }
            }
        }
